@@ -2,6 +2,7 @@
 
 <script lang="ts">
 	//import { data } from '$lib/data'
+	import placeholderImage from '$lib/assets/animemat.jpg';
 	import { onMount } from "svelte";
 	import type { Recipe } from '$lib/data';
 
@@ -29,7 +30,9 @@
 			<footer class="card-footer">{recipe.createdAt.toLocaleDateString()}</footer>
 		</a> -->
 		<a class="card bg-initial card-hover overflow-hidden" href="/elements/cards">
-			<header></header>
+			<header>
+				<img src={placeholderImage} alt="animemat:)"/>
+			</header>
 			<div class="p-4 space-y-4">
 				<h3 class="h3" data-toc-ignore>{recipe.title}</h3>
 				<article>
