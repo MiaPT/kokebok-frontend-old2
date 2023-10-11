@@ -29,7 +29,7 @@
 			<section class="p-4">{recipe.content}</section>
 			<footer class="card-footer">{recipe.createdAt.toLocaleDateString()}</footer>
 		</a> -->
-		<a class="card bg-initial card-hover overflow-hidden" href="/elements/cards">
+		<a class="card bg-initial card-hover overflow-hidden" href="/recipe/{recipe.id}">
 			<header>
 				<img src={placeholderImage} alt="animemat:)"/>
 			</header>

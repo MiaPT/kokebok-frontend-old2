@@ -1,6 +1,7 @@
 
 
 export type Recipe = {
+    id: number,
 	title: string;
 	content: string;
     created_at: Date,
