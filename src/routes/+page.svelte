@@ -1,34 +1,14 @@
-<!-- YOU CAN DELETE EVERYTHING IN THIS PAGE -->
-
 <script lang="ts">
-	//import { data } from '$lib/data'
 	import placeholderImage from '$lib/assets/animemat.jpg';
-	import { onMount } from "svelte";
 	import type { Recipe } from '$lib/data';
-
-
-	let recipedata: Recipe[] = [];
-
-	onMount(async () => {
-		recipedata = await fetch("http://127.0.0.1:8000/api/recipes/recipes")
-		.then(response => response.json())
-		.catch(error => {
-			console.log(error);
-			return [];
-		});
-	});
-
+	export let data: {"recipes": Recipe[]};
+	let recipes = data.recipes;
 
 </script>
 
 <h1>Recipes</h1>
 <div class="w-full text-token grid grid-cols-1 md:grid-cols-2 gap-4">
-	{#each recipedata as recipe}
-		<!-- <a href="/" class="block card card-hover p-4">
-			<header class="card-header">{recipe.title}</header>
-			<section class="p-4">{recipe.content}</section>
-			<footer class="card-footer">{recipe.createdAt.toLocaleDateString()}</footer>
-		</a> -->
+	{#each recipes as recipe}
 		<a class="card bg-initial card-hover overflow-hidden" href="/recipe/{recipe.id}">
 			<header>
 				<img src={placeholderImage} alt="animemat:)"/>
