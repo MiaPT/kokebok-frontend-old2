@@ -1,15 +1,14 @@
 <script lang="ts">
 	import placeholderImage from '$lib/assets/animemat.jpg';
-	import type { Recipe } from '$lib/data';
-	export let data: {"recipes": Recipe[]};
+	export let data: {"recipes": RecipeSummary[]};
 	let recipes = data.recipes;
 
 </script>
 
 <h1>Recipes</h1>
-<div class="w-full text-token grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="w-full text-token grid grid-cols-1 md:grid-cols-3 gap-4">
 	{#each recipes as recipe}
-		<a class="card bg-initial card-hover overflow-hidden" href="/recipe/{recipe.id}">
+		<a data-sveltekit-preload-data class="card bg-initial card-hover overflow-hidden" href="/recipe/{recipe.id}">
 			<header>
 				<img src={placeholderImage} alt="animemat:)"/>
 			</header>
@@ -17,7 +16,7 @@
 				<h3 class="h3" data-toc-ignore>{recipe.title}</h3>
 				<article>
 					<p>
-						{recipe.content}						
+						{recipe.preamble}						
 					</p>
 				</article>
 			</div>
