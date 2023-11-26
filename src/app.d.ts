@@ -12,6 +12,7 @@ declare type RecipeSummary = {
 	id: number;
 	title: string;
     created_at: Date;
+	hero_image: string;
 	ingredients: Ingredient[];
     preamble: string;
     total_time: number;
@@ -22,6 +23,7 @@ declare type Recipe = {
 	title: string;
 	content: string;
     created_at: Date;
+	hero_image: string;
 	ingredients: Ingredient[];
     origin_url: string;
     preamble: string;
@@ -35,9 +37,9 @@ declare type Recipe = {
 }
 
 declare type Ingredient = {
+	id: number;
 	name_no: string;
 	name_en: string;
-	baseIngredientID: number;
 	is_ubiquitus: boolean;
 }
 
@@ -49,4 +51,5 @@ declare type RecipeIngredient = {
 	group_name: string;
 	base_amount: number;
 	unit: string;
+	baseIngredientID: number;
 }
