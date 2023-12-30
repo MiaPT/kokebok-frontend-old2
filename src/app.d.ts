@@ -44,12 +44,14 @@ declare type Ingredient = {
 }
 
 declare type RecipeIngredient = {
-	recipe: string;
+	// Id for recipeingredient will be undefined as long as the recipeingredient isn't saved to the db
+	id?: number;
+	recipe?: string;
 	base_ingredient: string;
 	name_in_recipe: string;
 	is_optional: boolean;
 	group_name: string;
 	base_amount: number;
 	unit: string;
-	baseIngredientID: number;
+	base_ingredient_id: number;
 }
