@@ -159,16 +159,21 @@
 	}
 </script>
 
-<div class="flex justify-center">
-	<form on:submit|preventDefault={handleSubmit}>
-		<div class="row">
+<form on:submit|preventDefault={handleSubmit}>
+  <div class="space-y-12">
+
+    <h1 class="font-bold leading-7 text-4xl">Add Recipe🥗</h1>
+    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+
+		<div class="sm:col-span-full">
 			<label>Title</label>
-			<input bind:value={title} class="u-full-width text-black input" />
+			<input bind:value={title} class="input" />
 
 			<label>Description</label>
-			<input bind:value={description} class="u-full-width text-black input" />
+			<textarea bind:value={description} class="textarea" />
 		</div>
 
+    <div class="sm:col-span-full">
 		<input
 			class="input autocomplete"
 			type="search"
@@ -177,6 +182,7 @@
 			placeholder="Search..."
 			use:popup={popupSettings}
 		/>
+
 		<div data-popup="popupAutocomplete">
 			<Autocomplete
 				bind:input={searchTerm}
@@ -184,23 +190,31 @@
 				on:selection={handleSelectedIngredient}
 			/>
 		</div>
-
-		<div>
+    </div>
+		<!-- <div class="sm:col-span-full"> -->
 			{#each ingredients as ingredient}
+
+      <div class="sm:col-span-2 sm:col-start-1">
+        <p>Ingredient</p>
+        <div class="input-group">
+          <input
+            disabled
+            type="text"
+            placeholder="Base ingredient"
+            value={ingredient.base_ingredient}
+          />
+        </div>
+      </div>
+
+      <div class="sm:col-span-2 ">
 				<p>Name in recipe</p>
-				<div class="input-group grid-cols-[1fr_auto] basis-1/4">
+				<div class="input-group ">
 					<input type="text" placeholder="Name in recipe" bind:value={ingredient.name_in_recipe} />
 				</div>
+      </div>
 
-				<div class="input-group grid-cols-[1fr_auto] basis-1/4">
-					<input
-						disabled
-						type="text"
-						placeholder="Base ingredient"
-						value={ingredient.base_ingredient}
-					/>
-				</div>
 
+      <div class="sm:col-span-1">
 				<p>Amount</p>
 				<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
 					<!-- <div class="input-group-shim">(icon)</div> TODO: sick icon -->
@@ -211,16 +225,22 @@
 						{/each}
 					</select>
 				</div>
+      </div>
 
+      <div class="sm:col-span-1">
+      
 				<div>
+          <br>
 					<label class="flex items-center space-x-2">
 						<input type="checkbox" class="checkbox" bind:value={ingredient.is_optional} />
 						<p>Optional</p>
 					</label>
 				</div>
+      </div>
 			{/each}
-		</div>
+		<!-- </div> -->
 
 		<button type="submit" class="button-primary">Submit</button>
-	</form>
-</div>
+    </div>
+  </div>
+</form>

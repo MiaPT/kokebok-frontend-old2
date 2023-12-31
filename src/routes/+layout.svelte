@@ -38,7 +38,13 @@
 		</AppBar>
 	</svelte:fragment>
 	<!-- Page Route Content -->
-	<slot />
+	<div class="min-h-screen flex justify-center  ">
+        <div class="p-8 sm:w-128 max-w-screen-md w-full">
+			<div class="w-full flex">
+				<slot />
+			</div>
+        </div>
+    </div>
 
 	<svelte:fragment slot="pageFooter">
 		<div class="page-footer">
