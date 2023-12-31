@@ -1,22 +1,25 @@
 <script lang="ts">
 	import placeholderImage from '$lib/assets/animemat.jpg';
-	export let data: {"recipes": RecipeSummary[]};
+	export let data: { recipes: RecipeSummary[] };
 	let recipes = data.recipes;
-
 </script>
 
 <h1>Recipes</h1>
 <div class="w-full text-token grid grid-cols-1 md:grid-cols-3 gap-4">
 	{#each recipes as recipe}
-		<a data-sveltekit-preload-data class="card bg-initial card-hover overflow-hidden" href="/recipe/{recipe.id}">
+		<a
+			data-sveltekit-preload-data
+			class="card bg-initial card-hover overflow-hidden"
+			href="/recipe/{recipe.id}"
+		>
 			<header>
-				<img src={placeholderImage} alt="animemat:)"/>
+				<img src={placeholderImage} alt="animemat:)" />
 			</header>
 			<div class="p-4 space-y-4">
 				<h3 class="h3" data-toc-ignore>{recipe.title}</h3>
 				<article>
 					<p>
-						{recipe.preamble}						
+						{recipe.preamble}
 					</p>
 				</article>
 			</div>
@@ -32,5 +35,4 @@
 </div>
 
 <style lang="postcss">
-	
 </style>
