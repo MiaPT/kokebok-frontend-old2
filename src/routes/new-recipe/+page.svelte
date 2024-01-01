@@ -16,7 +16,7 @@
 	let popupSettings: PopupSettings = {
 		event: 'focus-click',
 		target: 'popupAutocomplete',
-		placement: 'bottom'
+		placement: 'bottom-start'
 	};
 
 	const emptyRecipeIngredient: RecipeIngredient = {
@@ -160,87 +160,96 @@
 </script>
 
 <form on:submit|preventDefault={handleSubmit}>
-  <div class="space-y-12">
+	<div class="space-y-12">
+		<h1 class="font-bold leading-7 text-4xl">Add Recipe🥗</h1>
+		<div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+			<div class="sm:col-span-full">
+				<label>Title</label>
+				<input bind:value={title} class="input" />
 
-    <h1 class="font-bold leading-7 text-4xl">Add Recipe🥗</h1>
-    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+				<label>Description</label>
+				<textarea bind:value={description} class="textarea" />
+			</div>
 
-		<div class="sm:col-span-full">
-			<label>Title</label>
-			<input bind:value={title} class="input" />
+			<div class="sm:col-span-full">
+				<input
+					class="input autocomplete"
+					type="search"
+					name="autocomplete-search"
+					bind:value={searchTerm}
+					placeholder="Search ingredient"
+					use:popup={popupSettings}
+				/>
 
-			<label>Description</label>
-			<textarea bind:value={description} class="textarea" />
+				<div data-popup="popupAutocomplete">
+					<Autocomplete
+						class="border-surface-300-600-token border-2 rounded-container-token bg-surface-700 hover:z-50 absolute"
+						bind:input={searchTerm}
+						options={allIngredients.map((i) => ({ label: i.name_no, value: i.id.toString() }))}
+						on:selection={handleSelectedIngredient}
+					/>
+				</div>
+			</div>
+			<div class="sm:col-span-full">
+				{#each ingredients as ingredient}
+					<div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-9 group -z-10">
+						<div class="sm:col-span-2 sm:col-start-1">
+							<p>Ingredient</p>
+							<div class="input-group">
+								<input
+									disabled
+									type="text"
+									placeholder="Base ingredient"
+									value={ingredient.base_ingredient}
+									class="relative"
+								/>
+							</div>
+						</div>
+
+						<div class="sm:col-span-3">
+							<p>Name in recipe</p>
+							<div class="input-group">
+								<input
+									type="text"
+									placeholder="Name in recipe"
+									bind:value={ingredient.name_in_recipe}
+								/>
+							</div>
+						</div>
+
+						<div class="sm:col-span-2">
+							<p>Amount</p>
+							<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+								<!-- <div class="input-group-shim">(icon)</div> TODO: sick icon -->
+								<input type="text" placeholder="Amount" bind:value={ingredient.base_amount} />
+								<select bind:value={ingredient.unit}>
+									{#each ingredientUnits as unit}
+										<option value={unit}>{unit}</option>
+									{/each}
+								</select>
+							</div>
+						</div>
+
+						<div class="sm:col-span-1">
+							<div>
+								<br />
+								<label class="flex items-center space-x-2">
+									<input type="checkbox" class="checkbox" bind:value={ingredient.is_optional} />
+									<p>Optional</p>
+								</label>
+							</div>
+						</div>
+
+						<div class="sm:col-span-1">
+							<!-- TODO: remove ingredient on click -->
+
+							<button class="group-hover:opacity-100 opacity-0 transition-opacity">❌</button>
+						</div>
+					</div>
+				{/each}
+			</div>
+
+			<button type="submit" class="button-primary">Submit</button>
 		</div>
-
-    <div class="sm:col-span-full">
-		<input
-			class="input autocomplete"
-			type="search"
-			name="autocomplete-search"
-			bind:value={searchTerm}
-			placeholder="Search..."
-			use:popup={popupSettings}
-		/>
-
-		<div data-popup="popupAutocomplete">
-			<Autocomplete
-				bind:input={searchTerm}
-				options={allIngredients.map((i) => ({ label: i.name_no, value: i.id.toString() }))}
-				on:selection={handleSelectedIngredient}
-			/>
-		</div>
-    </div>
-		<!-- <div class="sm:col-span-full"> -->
-			{#each ingredients as ingredient}
-
-      <div class="sm:col-span-2 sm:col-start-1">
-        <p>Ingredient</p>
-        <div class="input-group">
-          <input
-            disabled
-            type="text"
-            placeholder="Base ingredient"
-            value={ingredient.base_ingredient}
-          />
-        </div>
-      </div>
-
-      <div class="sm:col-span-2 ">
-				<p>Name in recipe</p>
-				<div class="input-group ">
-					<input type="text" placeholder="Name in recipe" bind:value={ingredient.name_in_recipe} />
-				</div>
-      </div>
-
-
-      <div class="sm:col-span-1">
-				<p>Amount</p>
-				<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
-					<!-- <div class="input-group-shim">(icon)</div> TODO: sick icon -->
-					<input type="text" placeholder="Amount" bind:value={ingredient.base_amount} />
-					<select bind:value={ingredient.unit}>
-						{#each ingredientUnits as unit}
-							<option value={unit}>{unit}</option>
-						{/each}
-					</select>
-				</div>
-      </div>
-
-      <div class="sm:col-span-1">
-      
-				<div>
-          <br>
-					<label class="flex items-center space-x-2">
-						<input type="checkbox" class="checkbox" bind:value={ingredient.is_optional} />
-						<p>Optional</p>
-					</label>
-				</div>
-      </div>
-			{/each}
-		<!-- </div> -->
-
-		<button type="submit" class="button-primary">Submit</button>
-    </div>
-  </div>
+	</div>
 </form>
