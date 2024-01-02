@@ -29,6 +29,10 @@
 		base_ingredient_id: 0
 	};
 
+	type KeyedRecipeIngredient = RecipeIngredient & {
+		key: string
+	}
+
 	const ingredientUnits = [
 		'g',
 		'kg',
@@ -63,10 +67,11 @@
 	let searchTerm = '';
 	// let ubiquitus = false;
 
-	let ingredients: RecipeIngredient[] = [];
+	let ingredients: KeyedRecipeIngredient[] = [];
 
 	function addIngredient(ingredient: RecipeIngredient) {
-		ingredients = [...ingredients, ingredient];
+		const key = Math.random().toString(36).substring(8)
+		ingredients = [...ingredients, {...ingredient, key}];
 	}
 
 	function handleSelectedIngredient(event: CustomEvent<AutocompleteOption<string>>) {
@@ -80,12 +85,16 @@
 		console.log(event);
 	}
 
-	$: matchingIngredients = allIngredients.filter((existingIngredient) => {
-		return (
-			existingIngredient.name_no?.includes(searchTerm) ||
-			existingIngredient.name_en?.includes(searchTerm)
-		);
-	});
+	// $: matchingIngredients = allIngredients.filter((existingIngredient) => {
+	// 	return (
+	// 		existingIngredient.name_no?.includes(searchTerm) ||
+	// 		existingIngredient.name_en?.includes(searchTerm)
+	// 	);
+	// });
+
+	function removeIngredient(key: string) {
+		ingredients = ingredients.filter(i => i.key !== key)
+	}
 
 	async function handleSubmit() {
 		console.log(ingredients);
@@ -95,24 +104,24 @@
 
 		///
 
-		let matchingIngredient = matchingIngredients.filter((i) => {
-			return language == 'no' ? i.name_no == searchTerm : i.name_en == searchTerm;
-		});
+		// let matchingIngredient = matchingIngredients.filter((i) => {
+		// 	return language == 'no' ? i.name_no == searchTerm : i.name_en == searchTerm;
+		// });
 
-		let ingredientId: number;
+		// let ingredientId: number;
 
-		if (matchingIngredient.length > 0) {
-			ingredientId = matchingIngredient[0].id;
-		} else {
-			ingredientId = await createIngredient(searchTerm);
-		}
+		// if (matchingIngredient.length > 0) {
+		// 	ingredientId = matchingIngredient[0].id;
+		// } else {
+		// 	ingredientId = await createIngredient(searchTerm);
+		// }
 
-		let recipeIngredients = [
-			{
-				base_ingredient_id: ingredientId,
-				name_in_recipe: searchTerm
-			}
-		];
+		// let recipeIngredients = [
+		// 	{
+		// 		base_ingredient_id: ingredientId,
+		// 		name_in_recipe: searchTerm
+		// 	}
+		// ];
 
 		///
 		let newRecipe = {
@@ -162,13 +171,13 @@
 <form on:submit|preventDefault={handleSubmit}>
 	<div class="space-y-12">
 		<h1 class="font-bold leading-7 text-4xl">Add Recipe🥗</h1>
-		<div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+		<div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-9">
 			<div class="sm:col-span-full">
 				<label>Title</label>
 				<input bind:value={title} class="input" />
 
 				<label>Description</label>
-				<textarea bind:value={description} class="textarea" />
+				<textarea bind:value={description} rows="5" class="textarea" />
 			</div>
 
 			<div class="sm:col-span-full">
@@ -191,7 +200,7 @@
 				</div>
 			</div>
 			<div class="sm:col-span-full">
-				{#each ingredients as ingredient}
+				{#each ingredients as ingredient (ingredient.key)}
 					<div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-9 group -z-10">
 						<div class="sm:col-span-2 sm:col-start-1">
 							<p>Ingredient</p>
@@ -243,7 +252,7 @@
 						<div class="sm:col-span-1">
 							<!-- TODO: remove ingredient on click -->
 
-							<button class="group-hover:opacity-100 opacity-0 transition-opacity">❌</button>
+							<button on:click={removeIngredient(ingredient.key)} class="group-hover:opacity-100 opacity-0 transition-opacity">❌</button>
 						</div>
 					</div>
 				{/each}
