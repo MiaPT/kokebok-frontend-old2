@@ -3,6 +3,8 @@
 	import { onDestroy } from 'svelte';
 	import { Autocomplete, popup } from '@skeletonlabs/skeleton';
 	import type { AutocompleteOption, PopupSettings } from '@skeletonlabs/skeleton';
+	import Dropdown from './dropdown.svelte';
+	import Dropdown2 from './dropdown2.svelte';
 
 	let allIngredients: Ingredient[] = [];
 	const unsubscribe = ingredientStore.subscribe((data) => {
@@ -30,8 +32,8 @@
 	};
 
 	type KeyedRecipeIngredient = RecipeIngredient & {
-		key: string
-	}
+		key: string;
+	};
 
 	const ingredientUnits = [
 		'g',
@@ -70,8 +72,8 @@
 	let ingredients: KeyedRecipeIngredient[] = [];
 
 	function addIngredient(ingredient: RecipeIngredient) {
-		const key = Math.random().toString(36).substring(8)
-		ingredients = [...ingredients, {...ingredient, key}];
+		const key = Math.random().toString(36).substring(8);
+		ingredients = [...ingredients, { ...ingredient, key }];
 	}
 
 	function handleSelectedIngredient(event: CustomEvent<AutocompleteOption<string>>) {
@@ -82,8 +84,17 @@
 			base_ingredient,
 			base_ingredient_id: Number(base_ingredient_id)
 		});
-		console.log(event);
 	}
+
+	function handleChangedIngredient(key: string, event: CustomEvent<AutocompleteOption<string>>) {
+		const ingredient = ingredients.find((i) => i.key === key)!;
+		const { label: base_ingredient, value: base_ingredient_id } = event.detail;
+		ingredient.base_ingredient = base_ingredient
+		ingredient.base_ingredient_id = Number(base_ingredient_id)
+		ingredients = [...ingredients]
+		console.log(ingredients)
+	}
+
 
 	// $: matchingIngredients = allIngredients.filter((existingIngredient) => {
 	// 	return (
@@ -93,7 +104,7 @@
 	// });
 
 	function removeIngredient(key: string) {
-		ingredients = ingredients.filter(i => i.key !== key)
+		ingredients = ingredients.filter((i) => i.key !== key);
 	}
 
 	async function handleSubmit() {
@@ -181,38 +192,22 @@
 			</div>
 
 			<div class="sm:col-span-full">
-				<input
-					class="input autocomplete"
-					type="search"
-					name="autocomplete-search"
-					bind:value={searchTerm}
-					placeholder="Search ingredient"
-					use:popup={popupSettings}
-				/>
 
-				<div data-popup="popupAutocomplete">
-					<Autocomplete
-						class="border-surface-300-600-token border-2 rounded-container-token bg-surface-700 hover:z-50 absolute"
-						bind:input={searchTerm}
-						options={allIngredients.map((i) => ({ label: i.name_no, value: i.id.toString() }))}
-						on:selection={handleSelectedIngredient}
-					/>
-				</div>
+				<Dropdown key="AddIngredient" ingredientsList={allIngredients} handleSelection={handleSelectedIngredient}/>
 			</div>
+
 			<div class="sm:col-span-full">
-				{#each ingredients as ingredient (ingredient.key)}
+				{#each ingredients as ingredient}
+				<!-- {#each ingredients as ingredient ([ingredient.key, ingredient.base_ingredient])} -->
 					<div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-9 group -z-10">
-						<div class="sm:col-span-2 sm:col-start-1">
+						<div class="sm:col-span-2 sm:col-start-1">	
 							<p>Ingredient</p>
-							<div class="input-group">
-								<input
-									disabled
-									type="text"
-									placeholder="Base ingredient"
-									value={ingredient.base_ingredient}
-									class="relative"
+							<Dropdown
+								key={ingredient.key}
+								ingredientsList={allIngredients}
+								handleSelection={(e) => handleChangedIngredient(ingredient.key, e)}
+								value={ingredient.base_ingredient}
 								/>
-							</div>
 						</div>
 
 						<div class="sm:col-span-3">
@@ -252,7 +247,10 @@
 						<div class="sm:col-span-1">
 							<!-- TODO: remove ingredient on click -->
 
-							<button on:click={removeIngredient(ingredient.key)} class="group-hover:opacity-100 opacity-0 transition-opacity">❌</button>
+							<button
+								on:click={removeIngredient(ingredient.key)}
+								class="group-hover:opacity-100 opacity-0 transition-opacity">❌</button
+							>
 						</div>
 					</div>
 				{/each}
