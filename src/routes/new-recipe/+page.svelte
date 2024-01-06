@@ -90,6 +90,7 @@
 		const { label: base_ingredient, value: base_ingredient_id } = event.detail;
 		ingredient.base_ingredient = base_ingredient
 		ingredient.base_ingredient_id = Number(base_ingredient_id)
+		ingredient.name_in_recipe = base_ingredient;
 		ingredients = [...ingredients]
 		console.log(ingredients)
 	}
@@ -196,16 +197,18 @@
 			</div>
 
 			<div class="sm:col-span-full">
-				{#each ingredients as ingredient ([ingredient.key, ingredient.base_ingredient])}
+				{#each ingredients as ingredient (ingredient.key)}
 					<div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-9 group -z-10">
 						<div class="sm:col-span-2 sm:col-start-1">	
 							<p>Ingredient</p>
+							{#key ingredient.base_ingredient}
 							<Dropdown
 								key={ingredient.key}
 								ingredientsList={allIngredients}
 								handleSelection={(e) => handleChangedIngredient(ingredient.key, e)}
 								value={ingredient.base_ingredient}
 								/>
+							{/key}
 						</div>
 
 						<div class="sm:col-span-3">
