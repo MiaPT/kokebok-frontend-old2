@@ -4,7 +4,6 @@
 	import { Autocomplete, popup } from '@skeletonlabs/skeleton';
 	import type { AutocompleteOption, PopupSettings } from '@skeletonlabs/skeleton';
 	import Dropdown from './dropdown.svelte';
-	import Dropdown2 from './dropdown2.svelte';
 
 	let allIngredients: Ingredient[] = [];
 	const unsubscribe = ingredientStore.subscribe((data) => {
@@ -197,8 +196,7 @@
 			</div>
 
 			<div class="sm:col-span-full">
-				{#each ingredients as ingredient}
-				<!-- {#each ingredients as ingredient ([ingredient.key, ingredient.base_ingredient])} -->
+				{#each ingredients as ingredient ([ingredient.key, ingredient.base_ingredient])}
 					<div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-9 group -z-10">
 						<div class="sm:col-span-2 sm:col-start-1">	
 							<p>Ingredient</p>
