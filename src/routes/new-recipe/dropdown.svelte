@@ -6,14 +6,14 @@
 
 	export let ingredientsList: Ingredient[];
 	export let handleSelection: (e: CustomEvent<AutocompleteOption<string>>) => void;
-	export let value: string = "";
+	export let value: string = '';
 	export let key: string;
-	
+
 	let searchTerm = value;
-	$:{
-		console.log(searchTerm)
+	$: {
+		console.log(searchTerm);
 	}
-	let popupkey = "dataPopup-" + key
+	let popupkey = 'dataPopup-' + key;
 
 	let popupSettings: PopupSettings = {
 		event: 'focus-click',

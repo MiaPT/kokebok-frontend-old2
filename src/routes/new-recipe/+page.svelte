@@ -88,13 +88,11 @@
 	function handleChangedIngredient(key: string, event: CustomEvent<AutocompleteOption<string>>) {
 		const ingredient = ingredients.find((i) => i.key === key)!;
 		const { label: base_ingredient, value: base_ingredient_id } = event.detail;
-		ingredient.base_ingredient = base_ingredient
-		ingredient.base_ingredient_id = Number(base_ingredient_id)
+		ingredient.base_ingredient = base_ingredient;
+		ingredient.base_ingredient_id = Number(base_ingredient_id);
 		ingredient.name_in_recipe = base_ingredient;
-		ingredients = [...ingredients]
-		console.log(ingredients)
+		ingredients = [...ingredients];
 	}
-
 
 	// $: matchingIngredients = allIngredients.filter((existingIngredient) => {
 	// 	return (
@@ -103,12 +101,14 @@
 	// 	);
 	// });
 
-	function removeIngredient(key: string) {
-		ingredients = ingredients.filter((i) => i.key !== key);
+	function removeIngredient(key: string, e: PointerEvent) {
+		console.log(e);
+		if (e.pointerType == 'mouse') {
+			ingredients = ingredients.filter((i) => i.key !== key);
+		}
 	}
 
 	async function handleSubmit() {
-		console.log(ingredients);
 		let recipe: Recipe = {} as Recipe;
 		recipe.title = title;
 		recipe.content = description;
@@ -192,21 +192,24 @@
 			</div>
 
 			<div class="sm:col-span-full">
-
-				<Dropdown key="AddIngredient" ingredientsList={allIngredients} handleSelection={handleSelectedIngredient}/>
+				<Dropdown
+					key="AddIngredient"
+					ingredientsList={allIngredients}
+					handleSelection={handleSelectedIngredient}
+				/>
 			</div>
 
 			<div class="sm:col-span-full">
 				{#each ingredients as ingredient (ingredient.key)}
 					<div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-9 group -z-10">
-						<div class="sm:col-span-2 sm:col-start-1">	
+						<div class="sm:col-span-2 sm:col-start-1">
 							<p>Ingredient</p>
 							{#key ingredient.base_ingredient}
-							<Dropdown
-								key={ingredient.key}
-								ingredientsList={allIngredients}
-								handleSelection={(e) => handleChangedIngredient(ingredient.key, e)}
-								value={ingredient.base_ingredient}
+								<Dropdown
+									key={ingredient.key}
+									ingredientsList={allIngredients}
+									handleSelection={(e) => handleChangedIngredient(ingredient.key, e)}
+									value={ingredient.base_ingredient}
 								/>
 							{/key}
 						</div>
@@ -246,10 +249,8 @@
 						</div>
 
 						<div class="sm:col-span-1">
-							<!-- TODO: remove ingredient on click -->
-
 							<button
-								on:click={removeIngredient(ingredient.key)}
+								on:click={(e) => removeIngredient(ingredient.key, e)}
 								class="group-hover:opacity-100 opacity-0 transition-opacity">❌</button
 							>
 						</div>
