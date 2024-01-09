@@ -14,11 +14,7 @@
 		unsubscribe();
 	});
 
-	let popupSettings: PopupSettings = {
-		event: 'focus-click',
-		target: 'popupAutocomplete',
-		placement: 'bottom-start'
-	};
+	let dropdownSearchTerm = ""
 
 	const emptyRecipeIngredient: RecipeIngredient = {
 		base_ingredient: '',
@@ -77,6 +73,7 @@
 
 	function handleSelectedIngredient(event: CustomEvent<AutocompleteOption<string>>) {
 		const { label: base_ingredient, value: base_ingredient_id } = event.detail;
+		console.log(event.detail)
 		addIngredient({
 			...emptyRecipeIngredient,
 			name_in_recipe: base_ingredient,

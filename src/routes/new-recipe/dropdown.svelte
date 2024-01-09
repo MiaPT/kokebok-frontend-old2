@@ -10,16 +10,28 @@
 	export let key: string;
 
 	let searchTerm = value;
-	$: {
-		console.log(searchTerm);
-	}
 	let popupkey = 'dataPopup-' + key;
+	
+	let optionList = ingredientsList.map((i) => ({ label: i.name_no, value: i.id.toString(), createNew: false })).concat([{ label: `➕ Add: ${searchTerm}`, value: searchTerm, createNew: true}])
 
 	let popupSettings: PopupSettings = {
 		event: 'focus-click',
 		target: popupkey,
 		placement: 'bottom-start'
 	};
+
+	function ingredientFilter(): AutocompleteOption<string>[]{
+		const _options = [...optionList]
+		console.log("using custom filter")
+		const filtered = _options.filter(o => o.label.includes(searchTerm))
+		//const addIngredientOption ={ label: `12345`, value: "searchTerm", createNew: true}
+		const addIngredientOption ={ label: `➕ Add: ${searchTerm}`, value: searchTerm, createNew: true}
+		// return  [addIngredientOption]
+		
+		
+		return searchTerm ? [...filtered, addIngredientOption] : filtered
+	}
+
 </script>
 
 <div>
@@ -38,8 +50,9 @@
 		<Autocomplete
 			class="border-surface-300-600-token border-2 rounded-container-token bg-surface-700 hover:z-50 absolute"
 			bind:input={searchTerm}
-			options={ingredientsList.map((i) => ({ label: i.name_no, value: i.id.toString() }))}
+			filter={ingredientFilter}
+			options={optionList}
 			on:selection={handleSelection}
-		/>
+			/>
 	</div>
 </div>
